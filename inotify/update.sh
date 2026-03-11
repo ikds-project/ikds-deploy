@@ -4,10 +4,12 @@
 CONTAINER="my-virtuoso"
 # CONTAINER="virtuoso"
 PORT="1111"
-USER="dba"
-PASS="dba"
+USER=$(cat /run/secrets/dba_user)
+PASS=$(cat /run/secrets/dba_password)
 RDF_DIR="/rdf"
 GRAPH_BASE="http://example.org/"
+
+
 
 echo "Loading RDF files from $RDF_DIR into Virtuoso..."
 

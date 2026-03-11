@@ -6,8 +6,8 @@ services:
     environment:
       - DBA_PASSWORD=${DBA_PASSWORD}
       - VIRT_DATABASE_ERRORLOGLEVEL=3
-      - VIRT_SPARQL_DEFAULTGRAPH=http://example.org
-      - VIRT_SPARQL_DEFAULTQUERY=SELECT DISTINCT * FROM <http://example.org/> WHERE { ?s ?p ?o } LIMIT 100
+      - VIRT_SPARQL_DEFAULTGRAPH=${VIRT_SPARQL_DEFAULTGRAPH}
+      - VIRT_SPARQL_DEFAULTQUERY=SELECT DISTINCT * FROM <${VIRT_SPARQL_DEFAULTGRAPH}> WHERE { ?s ?p ?o } LIMIT 100
       - VIRT_PARAMETERS_DIRSALLOWED=., /usr/local/virtuoso-opensource/share/virtuoso/vad, /rdf
       - VIRT_PLUGINS_-=-
       # performance tuning
@@ -38,11 +38,25 @@ services:
   watcher-app:
     container_name: watcher
     build: ./inotify
-    image: my-python-app
+    image: watcher
+    secrets:
+      - dba_password
+      - dba_user
+      - api_key
     environment:
-      - DBA_PASSWORD=${DBA_PASSWORD}
+      - DBA_PASSWORD=/run/secrets/dba_password
+      - VIRT_SPARQL_DEFAULTGRAPH=${VIRT_SPARQL_DEFAULTGRAPH}
     volumes:
       - ./rdf:/rdf
       - /var/run/docker.sock:/var/run/docker.sock
     depends_on:
       - virtuoso
+
+
+secrets:
+  dba_password:
+    environment: DBA_PASSWORD
+  dba_user:
+    environment: DBA_USER
+  api_key:
+    environment: API_KEY
