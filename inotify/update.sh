@@ -1,8 +1,7 @@
 #!/bin/bash
 
 # Configuration
-CONTAINER="my-virtuoso"
-# CONTAINER="virtuoso"
+CONTAINER="virtuoso"
 PORT="1111"
 USER=$(cat /run/secrets/dba_user)
 PASS=$(cat /run/secrets/dba_password)

@@ -5,9 +5,6 @@ RUN apk add --no-cache \
     inotify-tools \
     docker-cli
 
-ARG DBA_PASSWORD
-ENV DBA_PASSWORD=$DBA_PASSWORD
-
 WORKDIR .
 
 COPY watcher.sh .
