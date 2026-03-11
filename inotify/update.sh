@@ -3,7 +3,7 @@
 # Configuration
 CONTAINER="virtuoso"
 PORT="1111"
-USER=$(cat /run/secrets/dba_user)
+USER=dba
 PASS=$(cat /run/secrets/dba_password)
 RDF_DIR="/rdf"
 GRAPH_BASE="http://example.org/"

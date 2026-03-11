@@ -5,14 +5,11 @@ services:
     image: openlink/virtuoso-opensource-7
     secrets:
       - dba_password
-      - dba_user
-      - api_key
     command: >
-      sh -c '
-      export DBA_PASSWORD=$(cat /run/secrets/dba_password) &&
-      export DBA_USER=$(cat /run/secrets/dba_user) &&
+      sh -c "
+      export DBA_PASSWORD=$(cat /run/secrets/dba_password);
       exec /virtuoso-entrypoint.sh
-      '
+      "
     environment:
       - VIRT_DATABASE_ERRORLOGLEVEL=3
       - VIRT_SPARQL_DEFAULTGRAPH=${VIRT_SPARQL_DEFAULTGRAPH}
@@ -38,8 +35,7 @@ services:
     image: watcher
     secrets:
       - dba_password
-      - dba_user
-      - api_key
+
     environment:
       - VIRT_SPARQL_DEFAULTGRAPH=${VIRT_SPARQL_DEFAULTGRAPH}
     volumes:
@@ -50,8 +46,5 @@ services:
 
 secrets:
   dba_password:
-    environment: DBA_PASSWORD
-  dba_user:
-    environment: DBA_USER
-  api_key:
-    environment: API_KEY
+    file: ./secrets/dba_password.txt
+
