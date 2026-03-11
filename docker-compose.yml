@@ -1,0 +1,48 @@
+services:
+
+  virtuoso:
+    container_name: my-virtuoso
+    image: openlink/virtuoso-opensource-7
+    environment:
+      - DBA_PASSWORD=${DBA_PASSWORD}
+      - VIRT_DATABASE_ERRORLOGLEVEL=3
+      - VIRT_SPARQL_DEFAULTGRAPH=http://example.org
+      - VIRT_SPARQL_DEFAULTQUERY=SELECT DISTINCT * FROM <http://example.org/> WHERE { ?s ?p ?o } LIMIT 100
+      - VIRT_PARAMETERS_DIRSALLOWED=., /usr/local/virtuoso-opensource/share/virtuoso/vad, /rdf
+      - VIRT_PLUGINS_-=-
+      # performance tuning
+      - VIRT_NumberOfBuffers=170000
+      - VIRT_MaxDirtyBuffers=130000
+      - VIRT_CheckpointInterval=60
+    volumes:
+      - ./rdf:/rdf
+      - ./initdb.d:/opt/virtuoso-opensource/initdb.d
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "8890:8890"
+      - "1111:1111"
+    restart: unless-stopped
+
+
+  # watcher-app:
+  #   container_name: watcher
+  #   build: ./watcher
+  #   image: my-python-app
+  #   volumes:
+  #     - ./rdf:/rdf
+  #     - /var/run/docker.sock:/var/run/docker.sock
+  #   depends_on:
+  #     - virtuoso
+
+
+  watcher-app:
+    container_name: watcher
+    build: ./inotify
+    image: my-python-app
+    environment:
+      - DBA_PASSWORD=${DBA_PASSWORD}
+    volumes:
+      - ./rdf:/rdf
+      - /var/run/docker.sock:/var/run/docker.sock
+    depends_on:
+      - virtuoso
