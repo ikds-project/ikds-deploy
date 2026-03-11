@@ -7,8 +7,13 @@ services:
       - dba_password
       - dba_user
       - api_key
+    command: >
+      sh -c '
+      export DBA_PASSWORD=$(cat /run/secrets/dba_password) &&
+      export DBA_USER=$(cat /run/secrets/dba_user) &&
+      exec /virtuoso-entrypoint.sh
+      '
     environment:
-      - DBA_PASSWORD=${DBA_PASSWORD}
       - VIRT_DATABASE_ERRORLOGLEVEL=3
       - VIRT_SPARQL_DEFAULTGRAPH=${VIRT_SPARQL_DEFAULTGRAPH}
       - VIRT_SPARQL_DEFAULTQUERY=SELECT DISTINCT * FROM <${VIRT_SPARQL_DEFAULTGRAPH}> WHERE { ?s ?p ?o } LIMIT 100
