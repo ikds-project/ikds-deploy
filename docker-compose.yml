@@ -1,7 +1,7 @@
 services:
 
   virtuoso:
-    container_name: my-virtuoso
+    container_name: virtuoso
     image: openlink/virtuoso-opensource-7
     environment:
       - DBA_PASSWORD=${DBA_PASSWORD}
@@ -35,7 +35,7 @@ services:
   #     - virtuoso
 
 
-  watcher-app:
+  watcher:
     container_name: watcher
     build: ./inotify
     image: watcher
@@ -44,7 +44,6 @@ services:
       - dba_user
       - api_key
     environment:
-      - DBA_PASSWORD=/run/secrets/dba_password
       - VIRT_SPARQL_DEFAULTGRAPH=${VIRT_SPARQL_DEFAULTGRAPH}
     volumes:
       - ./rdf:/rdf
