@@ -1,1 +1,4 @@
 DBA_PASSWORD=dba
+DBA_USER=dba
+API_KEY=123
+VIRT_SPARQL_DEFAULTGRAPH=http://example.org/
